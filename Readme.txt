@@ -1,17 +1,5 @@
-Steps that might help to integrate whisper model into Frontend
-
-UI-Model integration:
-1- Convert model file into pickle file
-2- Find out a place in UI code to place the pickle file
-
-Firebase Solution structure:
-1- We might need a main collectin/folder to store our youtube data transcriptions
-2- Text chunks to be stored in Firebase subfolder/sub collection
-
-Working:
-1- By clicking on the "Transcribe" button on "COLLECT IT" pop-up, we need to convert the video into audio file and split the audio into 10 sec length chunks and store the chunks into a subfolder/subcollection in Firebase
-2- We need to load whisper model on the audio chunks to convert audio into text(subtitles.txt) 
-3- Subtitles.txt is to be converted into JSON file to be stored in the last folder(having JSON files) in firebase. 
-4- Fetch JSON file from firebase and show the transcriptions on the COLLECT IT pop-up.
-
-Note: The steps mentioned above may be subject to change.
+The goal of the project is to transcribe an audio file into text and then download that as a text file. The audio file is first split into small segments of 10 seconds each, because it's easier to transcribe smaller audio files than large ones. These audio segments are then passed to the OpenAI's Whisper package to transcribe the audio into text. The output of this step is a dictionary containing transcribed text, the starting time of each segment, and the duration of each segment.
+Once the audio is transcribed, we need to convert the output into a format that can be saved as subtitles. To do this, we need to modify the data structure to include the ending time of each segment as well. To accomplish this, we take each segment's duration and add it to the starting time to get the ending time.
+Next, we merge adjacent segments that have the same speaker. We do this by looking at the transcribed text of each segment and checking if the speaker is the same as the previous segment. If the speaker is the same, we merge the two segments into a single segment by combining the text and updating the end time of the first segment to be the end time of the second segment.
+Finally, we save the transcribed text as a subtitle file. The format used for the subtitle file is SRT (SubRip Text), which is a common format used for subtitles. Each subtitle contains an ID, a start time, an end time, and the transcribed text for that segment. The subtitle file is saved to a text file.
+Overall, the process involves splitting the audio file into smaller segments, transcribing each segment into text, modifying the output to include the end time of each segment, merging adjacent segments with the same speaker, and then saving the transcribed text as a subtitle file.
